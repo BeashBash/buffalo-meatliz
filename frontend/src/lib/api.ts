@@ -89,4 +89,5 @@ export const adminApi = {
   createBanner: (data: unknown) => api.post('/admin/banners', data),
   updateBanner: (id: string, data: unknown) => api.put(`/admin/banners/${id}`, data),
   deleteBanner: (id: string) => api.delete(`/admin/banners/${id}`),
-}
+
+ 

@@ -17,6 +17,7 @@ import WeighOrderPage from './pages/admin/WeighOrderPage'
 import ProductsPage from './pages/admin/ProductsPage'
 import ReportsPage from './pages/admin/ReportsPage'
 import PromotionsPage from './pages/admin/PromotionsPage'
+import SiteContentPage from './pages/admin/SiteContentPage'
 
 function RequireAuth({ children }: { children: React.ReactNode }) {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
@@ -51,9 +52,4 @@ export default function App() {
         <Route path="products" element={<ProductsPage />} />
         <Route path="reports" element={<ReportsPage />} />
         <Route path="promotions" element={<PromotionsPage />} />
-      </Route>
-
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
-  )
-}
+        <Route path="site-content" elem

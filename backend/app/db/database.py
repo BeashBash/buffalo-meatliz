@@ -10,8 +10,9 @@ class Base(DeclarativeBase):
 engine = create_async_engine(
     settings.database_url,
     echo=settings.app_env == "development",
-    pool_size=10,
-    max_overflow=20,
+    pool_size=5,
+    max_overflow=10,
+    connect_args={"statement_cache_size": 0},  # Required for Supabase transaction pooler
 )
 
 AsyncSessionLocal = async_sessionmaker(

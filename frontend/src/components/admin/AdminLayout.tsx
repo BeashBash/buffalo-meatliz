@@ -1,19 +1,20 @@
 import { Outlet, NavLink, useNavigate } from 'react-router-dom'
 import {
   LayoutDashboard, ShoppingBag, Scale, Package,
-  BarChart3, Tag, LogOut, Menu, X
+  BarChart3, Tag, LogOut, Menu, X, Globe
 } from 'lucide-react'
 import { useState } from 'react'
 import { useAuthStore } from '../../store/auth'
 import clsx from 'clsx'
 
 const NAV_ITEMS = [
-  { to: '/admin/dashboard', icon: LayoutDashboard, label: 'לוח בקרה' },
-  { to: '/admin/weigh',     icon: Scale,           label: 'שקילה 🔴', highlight: true },
-  { to: '/admin/orders',    icon: ShoppingBag,     label: 'הזמנות' },
-  { to: '/admin/products',  icon: Package,         label: 'מוצרים' },
-  { to: '/admin/promotions',icon: Tag,             label: 'מבצעים' },
-  { to: '/admin/reports',   icon: BarChart3,       label: 'דוחות' },
+  { to: '/admin/dashboard',     icon: LayoutDashboard, label: 'לוח בקרה' },
+  { to: '/admin/weigh',         icon: Scale,           label: 'שקילה 🔴', highlight: true },
+  { to: '/admin/orders',        icon: ShoppingBag,     label: 'הזמנות' },
+  { to: '/admin/products',      icon: Package,         label: 'מוצרים' },
+  { to: '/admin/promotions',    icon: Tag,             label: 'מבצעים' },
+  { to: '/admin/reports',       icon: BarChart3,       label: 'דוחות' },
+  { to: '/admin/site-content',  icon: Globe,           label: 'תוכן האתר' },
 ]
 
 export default function AdminLayout() {
@@ -102,10 +103,4 @@ export default function AdminLayout() {
           <div className="w-6" />
         </header>
 
-        <main className="flex-1 p-4 md:p-6 overflow-auto">
-          <Outlet />
-        </main>
-      </div>
-    </div>
-  )
-}
+        <m

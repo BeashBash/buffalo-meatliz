@@ -1,9 +1,11 @@
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from typing import List
 
 
 class Settings(BaseSettings):
-    supabase_url: str = "https://dbyykuyzgjfmsdtyrwzb.supabase.co"
+    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
+
+    supabase_url: str = "https://apsuoutdtsxsbyjajgmp.supabase.co"
     supabase_anon_key: str = ""
     supabase_service_key: str = ""
     database_url: str = ""
@@ -21,9 +23,6 @@ class Settings(BaseSettings):
     whatsapp_api_token: str = ""
     sms_api_url: str = ""
     sms_api_token: str = ""
-
-    class Config:
-        env_file = ".env"
 
     @property
     def cors_origins_list(self) -> List[str]:
