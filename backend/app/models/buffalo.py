@@ -226,3 +226,15 @@ class AdminUser(Base):
     password_hash: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class SiteContent(Base):
+    __tablename__ = "site_content"
+    __table_args__ = {"schema": "buffalo"}
+
+    key: Mapped[str] = mapped_column(String(200), primary_key=True)
+    value: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    type: Mapped[str] = mapped_column(String(20), nullable=False, default="text")
+    section: Mapped[str] = mapped_column(String(50), nullable=False, default="general")
+    label: Mapped[str] = mapped_column(String(200), nullable=False, default="")
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())

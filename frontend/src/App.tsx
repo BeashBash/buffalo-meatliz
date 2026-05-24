@@ -6,6 +6,7 @@ import HomePage from './pages/store/HomePage'
 import CheckoutPage from './pages/store/CheckoutPage'
 import OrderSuccessPage from './pages/store/OrderSuccessPage'
 import OrderTrackPage from './pages/store/OrderTrackPage'
+import PaymentPage from './pages/store/PaymentPage'
 
 // Admin pages
 import AdminLoginPage from './pages/admin/LoginPage'
@@ -15,6 +16,9 @@ import OrdersPage from './pages/admin/OrdersPage'
 import WeighingPage from './pages/admin/WeighingPage'
 import WeighOrderPage from './pages/admin/WeighOrderPage'
 import ProductsPage from './pages/admin/ProductsPage'
+import CategoriesPage from './pages/admin/CategoriesPage'
+import CustomersPage from './pages/admin/CustomersPage'
+import MessagesPage from './pages/admin/MessagesPage'
 import ReportsPage from './pages/admin/ReportsPage'
 import PromotionsPage from './pages/admin/PromotionsPage'
 import SiteContentPage from './pages/admin/SiteContentPage'
@@ -28,13 +32,14 @@ function RequireAuth({ children }: { children: React.ReactNode }) {
 export default function App() {
   return (
     <Routes>
-      {/* ── Customer Store ── */}
+      {/* Customer Store */}
       <Route path="/" element={<HomePage />} />
       <Route path="/checkout" element={<CheckoutPage />} />
       <Route path="/order-success/:orderNumber" element={<OrderSuccessPage />} />
       <Route path="/track/:orderNumber" element={<OrderTrackPage />} />
+      <Route path="/pay/:token" element={<PaymentPage />} />
 
-      {/* ── Admin ── */}
+      {/* Admin */}
       <Route path="/admin/login" element={<AdminLoginPage />} />
       <Route
         path="/admin"
@@ -45,11 +50,20 @@ export default function App() {
         }
       >
         <Route index element={<Navigate to="/admin/dashboard" replace />} />
-        <Route path="dashboard" element={<DashboardPage />} />
-        <Route path="orders" element={<OrdersPage />} />
-        <Route path="weigh" element={<WeighingPage />} />
+        <Route path="dashboard"    element={<DashboardPage />} />
+        <Route path="orders"       element={<OrdersPage />} />
+        <Route path="weigh"        element={<WeighingPage />} />
         <Route path="weigh/:orderId" element={<WeighOrderPage />} />
-        <Route path="products" element={<ProductsPage />} />
-        <Route path="reports" element={<ReportsPage />} />
-        <Route path="promotions" element={<PromotionsPage />} />
-        <Route path="site-content" elem
+        <Route path="products"     element={<ProductsPage />} />
+        <Route path="categories"   element={<CategoriesPage />} />
+        <Route path="customers"    element={<CustomersPage />} />
+        <Route path="messages"     element={<MessagesPage />} />
+        <Route path="reports"      element={<ReportsPage />} />
+        <Route path="promotions"   element={<PromotionsPage />} />
+        <Route path="site-content" element={<SiteContentPage />} />
+      </Route>
+
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  )
+}

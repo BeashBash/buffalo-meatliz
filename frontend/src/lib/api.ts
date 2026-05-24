@@ -90,4 +90,9 @@ export const adminApi = {
   updateBanner: (id: string, data: unknown) => api.put(`/admin/banners/${id}`, data),
   deleteBanner: (id: string) => api.delete(`/admin/banners/${id}`),
 
- 
+  // Site Content (CMS)
+  getSiteContent: () => api.get('/site-content/'),
+  getSiteContentMap: () => api.get('/site-content/map'),
+  updateSiteContent: (updates: Record<string, string>) =>
+    api.put('/site-content/', { updates }),
+}

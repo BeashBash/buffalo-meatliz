@@ -136,4 +136,15 @@ export default function Header({ onCartOpen, onSearch, contactEmail = 'info@buff
               {NAV_LINKS.map((link) => (
                 <a key={link.label} href={link.href}
                   onClick={() => setMobileOpen(false)}
-                  className="block px-2 py-3 text-sm font-semibold text-gray-400 hover:text-orange-40
+                  className="block px-2 py-3 text-sm font-semibold text-gray-400 hover:text-orange-400 uppercase tracking-wider border-b"
+                  style={{ borderColor: '#1e1d1d' }}>
+                  {link.label}
+                </a>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </header>
+  )
+}

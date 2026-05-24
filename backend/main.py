@@ -54,4 +54,6 @@ async def debug_network():
         try:
             ip = socket.getaddrinfo(host, 443)[0][4][0]
             results[host] = f"OK: {ip}"
-        except Exce
+        except Exception as e:
+            results[host] = f"FAIL: {e}"
+    return results

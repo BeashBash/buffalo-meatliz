@@ -1,20 +1,24 @@
 import { Outlet, NavLink, useNavigate } from 'react-router-dom'
 import {
   LayoutDashboard, ShoppingBag, Scale, Package,
-  BarChart3, Tag, LogOut, Menu, X, Globe
+  BarChart3, Tag, LogOut, Menu, X, Globe,
+  Users, MessageCircle, Layers
 } from 'lucide-react'
 import { useState } from 'react'
 import { useAuthStore } from '../../store/auth'
 import clsx from 'clsx'
 
 const NAV_ITEMS = [
-  { to: '/admin/dashboard',     icon: LayoutDashboard, label: 'לוח בקרה' },
-  { to: '/admin/weigh',         icon: Scale,           label: 'שקילה 🔴', highlight: true },
-  { to: '/admin/orders',        icon: ShoppingBag,     label: 'הזמנות' },
-  { to: '/admin/products',      icon: Package,         label: 'מוצרים' },
-  { to: '/admin/promotions',    icon: Tag,             label: 'מבצעים' },
-  { to: '/admin/reports',       icon: BarChart3,       label: 'דוחות' },
-  { to: '/admin/site-content',  icon: Globe,           label: 'תוכן האתר' },
+  { to: '/admin/dashboard',    icon: LayoutDashboard, label: 'לוח בקרה' },
+  { to: '/admin/weigh',        icon: Scale,           label: 'שקילה 🔴', highlight: true },
+  { to: '/admin/orders',       icon: ShoppingBag,     label: 'הזמנות' },
+  { to: '/admin/products',     icon: Package,         label: 'מוצרים' },
+  { to: '/admin/categories',   icon: Layers,          label: 'קטגוריות' },
+  { to: '/admin/customers',    icon: Users,           label: 'לקוחות' },
+  { to: '/admin/messages',     icon: MessageCircle,   label: 'הודעות WhatsApp' },
+  { to: '/admin/promotions',   icon: Tag,             label: 'מבצעים' },
+  { to: '/admin/reports',      icon: BarChart3,       label: 'דוחות' },
+  { to: '/admin/site-content', icon: Globe,           label: 'תוכן האתר' },
 ]
 
 export default function AdminLayout() {
@@ -50,7 +54,7 @@ export default function AdminLayout() {
         </div>
 
         {/* Nav */}
-        <nav className="flex-1 p-3 space-y-1">
+        <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
           {NAV_ITEMS.map(({ to, icon: Icon, label, highlight }) => (
             <NavLink
               key={to}
@@ -100,7 +104,15 @@ export default function AdminLayout() {
             <Menu size={24} className="text-gray-600" />
           </button>
           <span className="font-bold text-dark-800">באפלו מיטליז - ניהול</span>
-          <div className="w-6" />
+          <button onClick={() => setSidebarOpen(false)}>
+            <X size={24} className="text-gray-600 opacity-0 pointer-events-none" />
+          </button>
         </header>
 
-        <m
+        <main className="flex-1 p-4 md:p-6 overflow-auto">
+          <Outlet />
+        </main>
+      </div>
+    </div>
+  )
+}

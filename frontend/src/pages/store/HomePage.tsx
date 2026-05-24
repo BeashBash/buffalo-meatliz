@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { storeApi, adminApi } from '../../lib/api'
+import { fetchSiteContentMap, fetchCategories, fetchProducts, fetchProductsByCategory } from '../../lib/supabase'
 import type { Product, Category } from '../../types'
 import Header from '../../components/store/Header'
 import ProductCard from '../../components/store/ProductCard'
@@ -117,19 +117,26 @@ export default function HomePage() {
 
   useEffect(() => {
     Promise.all([
-      storeApi.getCategories(),
-      storeApi.getProducts(),
-      adminApi.getSiteContentMap().catch(() => ({ data: {} })),
-    ]).then(([c, p, sc]) => {
-      setCategories(c.data)
-      setProducts(p.data)
-      setCm(sc.data as Record<string, string>)
+      fetchCategories().catch(() => []),
+      fetchProducts().catch(() => []),
+      fetchSiteContentMap().catch(() => ({})),
+    ]).then(([cats, prods, sc]) => {
+      setCategories(cats as unknown as Category[])
+      setProducts(prods as unknown as Product[])
+      setCm(sc)
     }).finally(() => setLoading(false))
   }, [])
 
   useEffect(() => {
-    const p = activeCategory === 'all' ? storeApi.getProducts() : storeApi.getProducts(activeCategory)
-    p.then(r => setProducts(r.data))
+    if (activeCategory === 'all') {
+      fetchProducts()
+        .then(prods => setProducts(prods as unknown as Product[]))
+        .catch(() => {})
+    } else {
+      fetchProductsByCategory(activeCategory)
+        .then(prods => setProducts(prods as unknown as Product[]))
+        .catch(() => {})
+    }
   }, [activeCategory])
 
   useEffect(() => {
@@ -615,4 +622,37 @@ export default function HomePage() {
                 </div>
               ))}
               <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end', marginTop: '14px' }}>
-                {
+                {[Facebook, Instagram, Youtube].map((Icon, i) => (
+                  <a key={i} href="#" style={{ width: '34px', height: '34px', border: `1px solid ${C.border}`, borderRadius: '3px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: C.muted, transition: 'all 0.2s', textDecoration: 'none' }}
+                    onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.backgroundColor = C.accent; el.style.borderColor = C.accent; el.style.color = '#fff' }}
+                    onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.backgroundColor = 'transparent'; el.style.borderColor = C.border; el.style.color = C.muted }}>
+                    <Icon size={13} />
+                  </a>
+                ))}
+              </div>
+            </div>
+            {/* Gallery */}
+            <div>
+              <h4 style={{ color: '#fff', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.15em', fontSize: '13px', marginBottom: '18px' }}>גלריה</h4>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '4px' }}>
+                {DYNAMIC_GALLERY.map((src, i) => (
+                  <a key={i} href="#" style={{ overflow: 'hidden', borderRadius: '2px', display: 'block' }}>
+                    <img src={src} alt={`gallery ${i}`} style={{ width: '100%', height: '64px', objectFit: 'cover', transition: 'transform 0.3s' }}
+                      onMouseEnter={e => (e.currentTarget as HTMLImageElement).style.transform = 'scale(1.12)'}
+                      onMouseLeave={e => (e.currentTarget as HTMLImageElement).style.transform = 'scale(1)'} />
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style={{ borderTop: `1px solid ${C.border}`, padding: '14px 0' }}>
+          <div className="max-w-7xl mx-auto px-6" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <p style={{ color: C.muted, fontSize: '13px', margin: 0 }}>אטליז כשר/חלק | באר שבע</p>
+            <p style={{ color: C.muted, fontSize: '13px', margin: 0 }}>&#169; {new Date().getFullYear()} באפלו מיטליז</p>
+          </div>
+        </div>
+      </footer>
+    </div>
+  )
+}
