@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react'
 import { adminApi } from '../../lib/api'
 import { Link } from 'react-router-dom'
 import {
-  ShoppingBag, Scale, CreditCard, CheckCircle,
-  TrendingUp, Clock, AlertCircle
+  ShoppingBag, Scale, CreditCard,
+  TrendingUp, Clock,
 } from 'lucide-react'
 import type { DashboardStats } from '../../types'
 

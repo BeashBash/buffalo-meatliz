@@ -13,8 +13,6 @@ import AdminLoginPage from './pages/admin/LoginPage'
 import AdminLayout from './components/admin/AdminLayout'
 import DashboardPage from './pages/admin/DashboardPage'
 import OrdersPage from './pages/admin/OrdersPage'
-import WeighingPage from './pages/admin/WeighingPage'
-import WeighOrderPage from './pages/admin/WeighOrderPage'
 import ProductsPage from './pages/admin/ProductsPage'
 import CategoriesPage from './pages/admin/CategoriesPage'
 import CustomersPage from './pages/admin/CustomersPage'
@@ -22,6 +20,10 @@ import MessagesPage from './pages/admin/MessagesPage'
 import ReportsPage from './pages/admin/ReportsPage'
 import PromotionsPage from './pages/admin/PromotionsPage'
 import SiteContentPage from './pages/admin/SiteContentPage'
+
+// Station (weighing station — no auth required)
+import StationPage from './pages/station/StationPage'
+import StationWeighPage from './pages/station/StationWeighPage'
 
 function RequireAuth({ children }: { children: React.ReactNode }) {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
@@ -52,8 +54,6 @@ export default function App() {
         <Route index element={<Navigate to="/admin/dashboard" replace />} />
         <Route path="dashboard"    element={<DashboardPage />} />
         <Route path="orders"       element={<OrdersPage />} />
-        <Route path="weigh"        element={<WeighingPage />} />
-        <Route path="weigh/:orderId" element={<WeighOrderPage />} />
         <Route path="products"     element={<ProductsPage />} />
         <Route path="categories"   element={<CategoriesPage />} />
         <Route path="customers"    element={<CustomersPage />} />
@@ -62,6 +62,10 @@ export default function App() {
         <Route path="promotions"   element={<PromotionsPage />} />
         <Route path="site-content" element={<SiteContentPage />} />
       </Route>
+
+      {/* Weighing Station — standalone, no auth */}
+      <Route path="/station" element={<StationPage />} />
+      <Route path="/station/weigh/:orderId" element={<StationWeighPage />} />
 
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

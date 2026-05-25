@@ -364,3 +364,105 @@ export async function adminUpdateCustomer(id: string, p: UpdateCustomerPayload):
     p_internal_notes:        p.internal_notes        ?? null,
   })
 }
+
+// ── Station (weighing) types ────────────────────────────────────────────────
+
+export interface StationOrderItem {
+  id: string
+  product_name_he: string
+  pricing_type: 'per_kg' | 'per_unit'
+  price_at_order: number
+  quantity: number
+  requested_weight_kg: number | null
+  actual_weight_kg: number | null
+  estimated_price: number
+  actual_price: number | null
+  is_weighed: boolean
+  notes: string | null
+}
+
+export interface StationOrder {
+  id: string
+  order_number: string
+  customer_name: string
+  customer_phone: string
+  delivery_type: 'pickup' | 'delivery'
+  delivery_address: string | null
+  delivery_city: string | null
+  preferred_delivery_time: string | null
+  customer_notes: string | null
+  status: string
+  estimated_total: number
+  final_total: number | null
+  courier_name: string | null
+  courier_phone: string | null
+  created_at: string
+  items: StationOrderItem[]
+}
+
+// ── Station RPCs ────────────────────────────────────────────────────────────
+
+// PostgREST wraps scalar json returns as [{"fn_name": <value>}]
+function unwrapRpc<T>(raw: unknown, fnName: string): T {
+  if (Array.isArray(raw) && raw.length > 0 && typeof raw[0] === 'object' && raw[0] !== null && fnName in raw[0]) {
+    return (raw[0] as Record<string, unknown>)[fnName] as T
+  }
+  return raw as T
+}
+
+/** Orders waiting to be weighed (new / in_preparation) */
+export async function stationGetQueue(): Promise<StationOrder[]> {
+  const raw = await rpc<unknown>('station_get_queue')
+  const result = unwrapRpc<StationOrder[] | null>(raw, 'station_get_queue')
+  return result ?? []
+}
+
+/** Orders ready for delivery (weighed / payment_pending / paid) */
+export async function stationGetReadyOrders(): Promise<StationOrder[]> {
+  const raw = await rpc<unknown>('station_get_ready_orders')
+  const result = unwrapRpc<StationOrder[] | null>(raw, 'station_get_ready_orders')
+  return result ?? []
+}
+
+/** Single order with all item details */
+export async function stationGetOrder(orderId: string): Promise<StationOrder> {
+  const raw = await rpc<unknown>('station_get_order', { p_order_id: orderId })
+  return unwrapRpc<StationOrder>(raw, 'station_get_order')
+}
+
+/** Move order from new to in_preparation */
+export async function stationStartPreparation(orderId: string): Promise<void> {
+  return rpc<void>('station_start_preparation', { p_order_id: orderId })
+}
+
+/** Weigh a single item and get updated order back */
+export async function stationWeighItem(
+  orderId: string,
+  itemId: string,
+  actualWeightKg: number
+): Promise<StationOrder> {
+  const raw = await rpc<unknown>('station_weigh_item', {
+    p_order_id:         orderId,
+    p_item_id:          itemId,
+    p_actual_weight_kg: actualWeightKg,
+  })
+  return unwrapRpc<StationOrder>(raw, 'station_weigh_item')
+}
+
+/** Mark order as weighed, moves to weighed status */
+export async function stationCompleteWeighing(orderId: string): Promise<void> {
+  return rpc<void>('station_complete_weighing', { p_order_id: orderId })
+}
+
+/** Assign a courier (name + phone) to an order */
+export async function stationAssignCourier(
+  orderId: string,
+  courierName: string,
+  courierPhone: string
+): Promise<void> {
+  return rpc<void>('station_assign_courier', {
+    p_order_id:      orderId,
+    p_courier_name:  courierName,
+    p_courier_phone: courierPhone,
+  })
+}

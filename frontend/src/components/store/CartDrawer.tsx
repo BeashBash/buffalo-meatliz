@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useCartStore } from '../../store/cart'
 
 export default function CartDrawer() {
-  const { items, isOpen, closeCart, removeItem, updateItem, estimatedTotal } = useCartStore()
+  const { items, isOpen, closeCart, removeItem, estimatedTotal } = useCartStore()
   const navigate = useNavigate()
   const total = estimatedTotal()
 

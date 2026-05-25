@@ -1,8 +1,8 @@
 import { Outlet, NavLink, useNavigate } from 'react-router-dom'
 import {
-  LayoutDashboard, ShoppingBag, Scale, Package,
+  LayoutDashboard, ShoppingBag, Package,
   BarChart3, Tag, LogOut, Menu, X, Globe,
-  Users, MessageCircle, Layers
+  Users, MessageCircle, Layers, Scale, ExternalLink,
 } from 'lucide-react'
 import { useState } from 'react'
 import { useAuthStore } from '../../store/auth'
@@ -10,7 +10,6 @@ import clsx from 'clsx'
 
 const NAV_ITEMS = [
   { to: '/admin/dashboard',    icon: LayoutDashboard, label: 'לוח בקרה' },
-  { to: '/admin/weigh',        icon: Scale,           label: 'שקילה 🔴', highlight: true },
   { to: '/admin/orders',       icon: ShoppingBag,     label: 'הזמנות' },
   { to: '/admin/products',     icon: Package,         label: 'מוצרים' },
   { to: '/admin/categories',   icon: Layers,          label: 'קטגוריות' },
@@ -55,7 +54,7 @@ export default function AdminLayout() {
 
         {/* Nav */}
         <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
-          {NAV_ITEMS.map(({ to, icon: Icon, label, highlight }) => (
+          {NAV_ITEMS.map(({ to, icon: Icon, label }) => (
             <NavLink
               key={to}
               to={to}
@@ -64,12 +63,8 @@ export default function AdminLayout() {
                 clsx(
                   'flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all font-medium text-sm',
                   isActive
-                    ? highlight
-                      ? 'bg-meat-600 text-white'
-                      : 'bg-brand-600 text-white'
-                    : highlight
-                      ? 'text-meat-300 hover:bg-meat-900/30 hover:text-meat-200'
-                      : 'text-gray-300 hover:bg-dark-700 hover:text-white'
+                    ? 'bg-brand-600 text-white'
+                    : 'text-gray-300 hover:bg-dark-700 hover:text-white'
                 )
               }
             >
@@ -79,8 +74,18 @@ export default function AdminLayout() {
           ))}
         </nav>
 
-        {/* Logout */}
-        <div className="p-3 border-t border-dark-700">
+        {/* Station shortcut + Logout */}
+        <div className="p-3 border-t border-dark-700 space-y-1">
+          <a
+            href="/station"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-orange-300 hover:bg-orange-900/30 hover:text-orange-200 transition-all text-sm font-medium"
+          >
+            <Scale size={18} />
+            עמדת שקילה
+            <ExternalLink size={12} className="mr-auto opacity-60" />
+          </a>
           <button
             onClick={handleLogout}
             className="flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-gray-400 hover:bg-dark-700 hover:text-red-400 transition-all text-sm"
